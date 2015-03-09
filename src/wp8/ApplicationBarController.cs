@@ -123,7 +123,7 @@ namespace Cordova.Extension.Commands
             }
 
             // Opacity
-            if (appBarOptions.opacity > 0)
+            if (appBarOptions.opacity >= 0)
             {
                 appBar.Opacity = appBarOptions.opacity;
             }

@@ -14,7 +14,7 @@ namespace Cordova.Extension.Commands
     /// <summary>
     /// Implements access to application live tiles
     /// </summary>
-    public class ApplicationBar : BaseCommand
+    public class ApplicationBarController : BaseCommand
     {
 
         #region Live tiles options
@@ -28,26 +28,40 @@ namespace Cordova.Extension.Commands
             /// <summary>
             /// IsMenuEnabled
             /// </summary>
-            [DataMember(IsRequired = false, Name = "IsMenuEnabled")]
-            public string IsMenuEnabled { get; set; }
+            [DataMember(IsRequired = false, Name = "isMenuEnabled")]
+            public bool IsMenuEnabled { get; set; }
 
             /// <summary>
             /// Mode
             /// </summary>
-            [DataMember(IsRequired = false, Name = "Mode")]
+            [DataMember(IsRequired = false, Name = "mode")]
             public string Mode { get; set; }
 
             /// <summary>
             /// IsVisible
             /// </summary>
-            [DataMember(IsRequired = false, Name = "IsVisible")]
-            public string IsVisible { get; set; }
+            [DataMember(IsRequired = false, Name = "isVisible")]
+            public bool IsVisible { get; set; }
 
             /// <summary>
             /// Opacity
             /// </summary>
-            [DataMember(IsRequired = false, Name = "Opacity")]
+            [DataMember(IsRequired = false, Name = "opacity")]
             public int Opacity { get; set; }
+
+            /// <summary>
+            /// BackgroundColor
+            /// </summary>
+            [DataMember(IsRequired = false, Name = "backgroundColor")]
+            public string BackgroundColor { get; set; }
+
+            /// <summary>
+            /// ForegroundColor
+            /// </summary>
+            [DataMember(IsRequired = false, Name = "foregroundColor")]
+            public string ForegroundColor { get; set; }
+
+
         }
         #endregion
 
@@ -90,27 +104,42 @@ namespace Cordova.Extension.Commands
             ApplicationBar appBar = new ApplicationBar();
 
             // IsMenuEnabled
-            if (!string.IsNullOrEmpty(appBarOptions.IsMenuEnabled))
+            if (appBarOptions.isMenuEnabled)
             {
-                appBar.IsMenuEnabled = appBarOptions.IsMenuEnabled;
+                appBar.IsMenuEnabled = appBarOptions.isMenuEnabled;
             }
 
             // Mode
-            if (!string.IsNullOrEmpty(appBarOptions.Mode))
+            if (!string.IsNullOrEmpty(appBarOptions.mode))
             {
-                appBar.Mode = appBarOptions.Mode;
+                if (appBarOptions.mode == "default") 
+                    appBar.Mode = ApplicationBarMode.Default;
+                else if (appBarOptions.mode == "minimized")
+                    appBar.Mode = ApplicationBarMode.Minimized;
             }
 
             // IsVisible
-            if (!string.IsNullOrEmpty(appBarOptions.IsVisible))
+            if (appBarOptions.isVisible)
             {
-                appBar.IsVisible = appBarOptions.IsVisible;
+                appBar.IsVisible = appBarOptions.isVisible;
+            }
+
+            // BackgroundColor
+            if (!string.IsNullOrEmpty(appBarOptions.backgroundColor))
+            {
+                appBar.BackgroundColor = appBarOptions.backgroundColor;
+            }
+
+            // BackgroundColor
+            if (!string.IsNullOrEmpty(appBarOptions.foregroundColor))
+            {
+                appBar.ForegroundColor = appBarOptions.foregroundColor;
             }
 
             // Opacity
-            if (appBarOptions.Opacity > 0)
+            if (appBarOptions.opacity > 0)
             {
-                appBar.Opacity = appBarOptions.Opacity;
+                appBar.Opacity = appBarOptions.opacity;
             }
 
             return appBar;

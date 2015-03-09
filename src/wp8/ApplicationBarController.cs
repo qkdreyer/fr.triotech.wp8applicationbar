@@ -2,7 +2,6 @@
 using Microsoft.Phone.Shell;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using Microsoft.Phone.Controls;
 using System.Windows;
@@ -78,7 +77,6 @@ namespace Cordova.Extension.Commands
             try
             {
                 appBarOptions = JsonHelper.Deserialize<ApplicationBarOptions>(args[0]);
-                Debug.WriteLine(appBarOptions.foregroundColor);
             }
             catch (Exception e)
             {

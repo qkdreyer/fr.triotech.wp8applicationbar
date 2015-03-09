@@ -26,7 +26,7 @@
                 <param name="wp-package" value="ApplicationBar"/>
             </feature>
         </config-file>
-        <source-file src="src/wp8/ApplicationBar.cs" />
+        <source-file src="src/wp8/ApplicationBarController.cs" />
     </platform>
 
 </plugin>

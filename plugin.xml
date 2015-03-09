@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
+		xmlns:android="http://schemas.android.com/apk/res/android"
+        id="fr.triotech.wp8applicationbar"
+        version="1.0.0">
+
+    <name>Phonegap Plugin ApplicationBar for Windows Phone 8</name>
+    <description>
+		Phonegap function to update the ApplicationBar parameters for Windows Phone 8.
+	</description>
+    <license>MIT</license>
+    <keywords>phonegap,cordova,applicationbar,application,bar,wp8,windows phone 8</keywords>
+	
+	<engines>
+        <engine name="cordova" version=">=3.0.0" />
+    </engines> 
+
+    <js-module src="www/ApplicationBar.js" name="ApplicationBar">
+        <clobbers target="ApplicationBar" />
+    </js-module>
+
+    <!-- wp8 -->
+    <platform name="wp8">
+        <config-file target="config.xml" parent="/*">
+            <feature name="ApplicationBar">
+                <param name="wp-package" value="ApplicationBar"/>
+            </feature>
+        </config-file>
+        <source-file src="src/wp8/ApplicationBar.cs" />
+    </platform>
+
+</plugin>

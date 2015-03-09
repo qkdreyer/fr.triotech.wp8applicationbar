@@ -2,68 +2,68 @@
 using Microsoft.Phone.Shell;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Microsoft.Phone.Controls;
 using System.Windows;
 using WPCordovaClassLib.Cordova.Commands;
 using WPCordovaClassLib.Cordova.JSON;
 using WPCordovaClassLib.Cordova;
+using Convert = System.Convert;
 using Color = System.Windows.Media.Color;
 
 namespace Cordova.Extension.Commands
 {
     /// <summary>
-    /// Implements access to application live tiles
+    /// Implements access to application bar
     /// </summary>
     public class ApplicationBarController : BaseCommand
-    {
+    {        
+        #region ApplibationBar Options
 
-        #region Live tiles options
-        
         /// <summary>
-        /// Represents LiveTile options
+        /// Represents Application options
         /// </summary>
         [DataContract]
         public class ApplicationBarOptions
         {
             /// <summary>
-            /// IsMenuEnabled
+            /// isMenuEnabled
             /// </summary>
             [DataMember(IsRequired = false, Name = "isMenuEnabled")]
-            public bool isMenuEnabled { get; set; }
+            public string isMenuEnabled { get; set; }
 
             /// <summary>
-            /// Mode
+            /// mode
             /// </summary>
             [DataMember(IsRequired = false, Name = "mode")]
             public string mode { get; set; }
 
             /// <summary>
-            /// IsVisible
+            /// isVisible
             /// </summary>
             [DataMember(IsRequired = false, Name = "isVisible")]
-            public bool isVisible { get; set; }
+            public string isVisible { get; set; }
 
             /// <summary>
-            /// Opacity
+            /// opacity
             /// </summary>
             [DataMember(IsRequired = false, Name = "opacity")]
-            public int opacity { get; set; }
+            public float opacity { get; set; }
 
             /// <summary>
-            /// BackgroundColor
+            /// backgroundColor
             /// </summary>
             [DataMember(IsRequired = false, Name = "backgroundColor")]
             public string backgroundColor { get; set; }
 
             /// <summary>
-            /// ForegroundColor
+            /// foregroundColor
             /// </summary>
             [DataMember(IsRequired = false, Name = "foregroundColor")]
             public string foregroundColor { get; set; }
-
-
         }
+        
         #endregion
 
         /// <summary>
@@ -78,34 +78,35 @@ namespace Cordova.Extension.Commands
             try
             {
                 appBarOptions = JsonHelper.Deserialize<ApplicationBarOptions>(args[0]);
+                Debug.WriteLine(appBarOptions.foregroundColor);
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                DispatchCommandResult(new PluginResult(PluginResult.Status.JSON_EXCEPTION), callbackId);
+                DispatchCommandResult(new PluginResult(PluginResult.Status.JSON_EXCEPTION, "Error derializing options: " + e.Message), callbackId);
                 return;
             }
 
+            ApplicationBar appBar = new ApplicationBar();
             try
             {
-                ApplicationBar appBar = CreateApplicationBar(appBarOptions);
+                appBar = CreateApplicationBar(appBar, appBarOptions);
+                DispatchCommandResult(new PluginResult(PluginResult.Status.OK), callbackId);
             }
-            catch(Exception)
+            catch(Exception e)
             {
-                DispatchCommandResult(new PluginResult(PluginResult.Status.ERROR, "Error updating application bar"), callbackId);
+                DispatchCommandResult(new PluginResult(PluginResult.Status.ERROR, "Error updating application bar: " + e.Message), callbackId);
             }
         }
 
         /// <summary>
-        /// Creates standard tile data
+        /// Updates ApplicationBar with ApplicationBarOptions
         /// </summary>
-        private ApplicationBar CreateApplicationBar(ApplicationBarOptions appBarOptions)
+        private ApplicationBar CreateApplicationBar(ApplicationBar appBar, ApplicationBarOptions appBarOptions)
         {
-            ApplicationBar appBar = new ApplicationBar();
-
             // IsMenuEnabled
-            if (appBarOptions.isMenuEnabled)
+            if (!string.IsNullOrEmpty(appBarOptions.isMenuEnabled))
             {
-                appBar.IsMenuEnabled = appBarOptions.isMenuEnabled;
+                appBar.IsMenuEnabled = Convert.ToBoolean(appBarOptions.isMenuEnabled);
             }
 
             // Mode
@@ -118,9 +119,9 @@ namespace Cordova.Extension.Commands
             }
 
             // IsVisible
-            if (appBarOptions.isVisible)
+            if (!string.IsNullOrEmpty(appBarOptions.isVisible))
             {
-                appBar.IsVisible = appBarOptions.isVisible;
+                appBar.IsVisible = Convert.ToBoolean(appBarOptions.isVisible);
             }
 
             // Opacity

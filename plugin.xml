@@ -22,8 +22,8 @@
     <!-- wp8 -->
     <platform name="wp8">
         <config-file target="config.xml" parent="/*">
-            <feature name="ApplicationBar">
-                <param name="wp-package" value="ApplicationBar"/>
+            <feature name="ApplicationBarController">
+                <param name="wp-package" value="ApplicationBarController"/>
             </feature>
         </config-file>
         <source-file src="src/wp8/ApplicationBarController.cs" />

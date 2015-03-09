@@ -8,6 +8,7 @@ using System.Windows;
 using WPCordovaClassLib.Cordova.Commands;
 using WPCordovaClassLib.Cordova.JSON;
 using WPCordovaClassLib.Cordova;
+using Color = System.Windows.Media.Color;
 
 namespace Cordova.Extension.Commands
 {
@@ -29,37 +30,37 @@ namespace Cordova.Extension.Commands
             /// IsMenuEnabled
             /// </summary>
             [DataMember(IsRequired = false, Name = "isMenuEnabled")]
-            public bool IsMenuEnabled { get; set; }
+            public bool isMenuEnabled { get; set; }
 
             /// <summary>
             /// Mode
             /// </summary>
             [DataMember(IsRequired = false, Name = "mode")]
-            public string Mode { get; set; }
+            public string mode { get; set; }
 
             /// <summary>
             /// IsVisible
             /// </summary>
             [DataMember(IsRequired = false, Name = "isVisible")]
-            public bool IsVisible { get; set; }
+            public bool isVisible { get; set; }
 
             /// <summary>
             /// Opacity
             /// </summary>
             [DataMember(IsRequired = false, Name = "opacity")]
-            public int Opacity { get; set; }
+            public int opacity { get; set; }
 
             /// <summary>
             /// BackgroundColor
             /// </summary>
             [DataMember(IsRequired = false, Name = "backgroundColor")]
-            public string BackgroundColor { get; set; }
+            public string backgroundColor { get; set; }
 
             /// <summary>
             /// ForegroundColor
             /// </summary>
             [DataMember(IsRequired = false, Name = "foregroundColor")]
-            public string ForegroundColor { get; set; }
+            public string foregroundColor { get; set; }
 
 
         }
@@ -86,8 +87,6 @@ namespace Cordova.Extension.Commands
 
             try
             {
-                InitializeComponent();
-
                 ApplicationBar appBar = CreateApplicationBar(appBarOptions);
             }
             catch(Exception)
@@ -124,25 +123,50 @@ namespace Cordova.Extension.Commands
                 appBar.IsVisible = appBarOptions.isVisible;
             }
 
-            // BackgroundColor
-            if (!string.IsNullOrEmpty(appBarOptions.backgroundColor))
-            {
-                appBar.BackgroundColor = appBarOptions.backgroundColor;
-            }
-
-            // BackgroundColor
-            if (!string.IsNullOrEmpty(appBarOptions.foregroundColor))
-            {
-                appBar.ForegroundColor = appBarOptions.foregroundColor;
-            }
-
             // Opacity
             if (appBarOptions.opacity > 0)
             {
                 appBar.Opacity = appBarOptions.opacity;
             }
 
+            // BackgroundColor
+            if (!string.IsNullOrEmpty(appBarOptions.backgroundColor))
+            {
+                appBar.BackgroundColor = ConvertStringToColor(appBarOptions.backgroundColor);
+            }
+
+            // BackgroundColor
+            if (!string.IsNullOrEmpty(appBarOptions.foregroundColor))
+            {
+                appBar.ForegroundColor = ConvertStringToColor(appBarOptions.foregroundColor);
+            }
+
             return appBar;
+        }
+
+        /// <summary>
+        /// Converts string to color
+        /// source: http://stackoverflow.com/a/11739523/3861558
+        /// </summary>
+        public Color ConvertStringToColor(String hex)
+        {
+            hex = hex.Replace("#", "");
+            byte a = 255;
+            byte r = 255;
+            byte g = 255;
+            byte b = 255;
+
+            int start = 0;
+            if (hex.Length == 8)
+            {
+                a = byte.Parse(hex.Substring(0, 2), System.Globalization.NumberStyles.HexNumber);
+                start = 2;
+            }
+            r = byte.Parse(hex.Substring(start, 2), System.Globalization.NumberStyles.HexNumber);
+            g = byte.Parse(hex.Substring(start + 2, 2), System.Globalization.NumberStyles.HexNumber);
+            b = byte.Parse(hex.Substring(start + 4, 2), System.Globalization.NumberStyles.HexNumber);
+
+            return Color.FromArgb(a, r, g, b);
         }
 
     }
